@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unipol Risparmio Bonus - Scopri l'offerta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        .email-container {
+            max-width: 650px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #003366 0%, #005fa3 100%);
+            color: white;
+            padding: 50px 30px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.4em;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            margin-bottom: 8px;
+        }
+
+        .hero .subheading {
+            font-size: 0.95em;
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        .content {
+            padding: 40px 35px;
+        }
+
+        .intro-section {
+            background: #f8f9fa;
+            border-left: 5px solid #005fa3;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+        }
+
+        .intro-section p {
+            margin: 10px 0;
+            font-size: 0.95em;
+            line-height: 1.7;
+        }
+
+        .intro-section strong {
+            color: #003366;
+        }
+
+        h2 {
+            color: #003366;
+            font-size: 1.6em;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #005fa3;
+        }
+
+        .benefit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .benefit-box {
+            background: #f0f6ff;
+            border: 2px solid #d4e5f7;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-box:hover {
+            border-color: #005fa3;
+            box-shadow: 0 4px 12px rgba(0, 95, 163, 0.15);
+        }
+
+        .benefit-box .icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .benefit-box h4 {
+            color: #003366;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        .benefit-box p {
+            font-size: 0.85em;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffebcd 100%);
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .highlight-box h3 {
+            color: #856404;
+            font-size: 1.3em;
+            margin-bottom: 8px;
+        }
+
+        .highlight-box p {
+            color: #856404;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .scenario-table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+
+        .scenario-table th {
+            background: #003366;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .scenario-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.9em;
+        }
+
+        .scenario-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .scenario-table .scenario-name {
+            text-align: left;
+            font-weight: 600;
+            color: #003366;
+        }
+
+        .scenario-table .value-strong {
+            font-weight: 700;
+            color: #003366;
+        }
+
+        .features-list {
+            margin: 20px 0;
+        }
+
+        .features-list li {
+            margin: 12px 0;
+            padding-left: 25px;
+            position: relative;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .features-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #005fa3;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .comparison-section {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .comparison-section h4 {
+            color: #003366;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .ranking-highlight {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            text-align: center;
+            border: 2px solid #005fa3;
+        }
+
+        .ranking-highlight .rank {
+            color: #005fa3;
+            font-weight: 700;
+            font-size: 1.3em;
+        }
+
+        .ranking-highlight .name {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .ranking-highlight .return {
+            color: #28a745;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #003366 0%, #005fa3 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .cta-section h3 {
+            font-size: 1.4em;
+            margin-bottom: 12px;
+        }
+
+        .cta-section p {
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #005fa3;
+            padding: 14px 35px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            margin: 0 8px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .secondary-cta {
+            display: inline-block;
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 0 8px;
+        }
+
+        .secondary-cta:hover {
+            background: white;
+            color: #005fa3;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 25px 35px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .footer p {
+            margin: 8px 0;
+        }
+
+        .footer a {
+            color: #005fa3;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #005fa3, transparent);
+            margin: 30px 0;
+        }
+
+        .guarantee-badge {
+            display: inline-block;
+            background: #d4edda;
+            color: #155724;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 10px 5px 10px 0;
+        }
+
+        @media (max-width: 480px) {
+            .content {
+                padding: 25px 20px;
+            }
+
+            .hero h1 {
+                font-size: 1.8em;
+            }
+
+            .benefit-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h2 {
+                font-size: 1.3em;
+            }
+
+            .cta-button, .secondary-cta {
+                display: block;
+                width: 100%;
+                margin: 8px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- HERO -->
+        <div class="hero">
+            <h1>💰 Risparmio Bonus</h1>
+            <p>Il tuo piano personalizzato per il futuro</p>
+            <p class="subheading">Con garantie, bonus e rendimenti competitivi</p>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- INTRO -->
+            <div class="intro-section">
+                <p>
+                    Caro cliente,<br><br>
+                    Vogliamo condividere con te un'opportunità di <strong>risparmio strutturato e protetto</strong>. 
+                    <strong>Unipol Risparmio Bonus</strong> è il prodotto che unisce sicurezza, crescita del patrimonio e 
+                    tranquillità per il tuo futuro.
+                </p>
+            </div>
+
+            <!-- HIGHLIGHTS -->
+            <h2>Perché scegliere Risparmio Bonus?</h2>
+
+            <div class="benefit-grid">
+                <div class="benefit-box">
+                    <div class="icon">🎁</div>
+                    <h4>Bonus Garantito</h4>
+                    <p><strong>+15%</strong> del capitale alla scadenza</p>
+                </div>
+                <div class="benefit-box">
+                    <div class="icon">📈</div>
+                    <h4>Rendimenti Competitivi</h4>
+                    <p>Gestione separata <strong>Valore Unipol</strong></p>
+                </div>
+                <div class="benefit-box">
+                    <div class="icon">🛡️</div>
+                    <h4>Protezione Decesso</h4>
+                    <p>Controassicurazione inclusa per i tuoi beneficiari</p>
+                </div>
+                <div class="benefit-box">
+                    <div class="icon">💪</div>
+                    <h4>Flessibilità</h4>
+                    <p>Riscatto dopo 3 anni, durata da 10 a 30 anni</p>
+                </div>
+            </div>
+
+            <!-- BONUS HIGHLIGHT -->
+            <div class="highlight-box">
+                <h3>🎯 Il Bonus è Garantito</h3>
+                <p>
+                    Indipendentemente dall'andamento dei mercati, alla scadenza riceverai 
+                    il 15% di bonus sul tuo capitale rivalutato
+                </p>
+            </div>
+
+            <!-- CHARACTERISTICS -->
+            <h2>Come funziona?</h2>
+            <ul class="features-list">
+                <li>Versi un <strong>premio annuale fisso</strong> (da 10 a 30 anni, a tua scelta)</li>
+                <li>Il capitale è <strong>rivalutato ogni anno</strong> in base alla Gestione separata Valore Unipol</li>
+                <li>Alla scadenza, ricevi il capitale + bonus 15% <strong>garantito</strong></li>
+                <li>Tasso minimo garantito: <strong>0,00% annuo</strong> (nessun rischio di perdita del capitale)</li>
+                <li>Se accade qualcosa a te, i tuoi beneficiari ricevono una <strong>controassicurazione</strong></li>
+                <li>Puoi fare <strong>riscatto anticipato</strong> dopo 3 anni, senza penalità significative</li>
+            </ul>
+
+            <!-- PERFORMANCE COMPARISON -->
+            <h2>Rendimenti 2025 - Posizionamento nel mercato</h2>
+
+            <div class="comparison-section">
+                <h4>Le gestioni Unipol ai vertici della classifica</h4>
+                
+                <div class="ranking-highlight">
+                    <div class="rank">🥇 1°</div>
+                    <div class="name">Unipol Fondivita</div>
+                    <div class="return">4,39% annuo</div>
+                </div>
+
+                <div class="ranking-highlight">
+                    <div class="rank">🥈 2°</div>
+                    <div class="name">Unipol Press</div>
+                    <div class="return">4,25% annuo</div>
+                </div>
+
+                <div class="ranking-highlight">
+                    <div class="rank">🏆 Altre gestioni Unipol</div>
+                    <div class="name">PlusValore, Gest 1, Valore, R.E., Risparmio Dinamico</div>
+                    <div class="return">Tra 3,20% e 4,00% annuo</div>
+                </div>
+
+                <p style="text-align: center; margin-top: 15px; font-size: 0.85em; color: #666;">
+                    ℹ️ Classifica 2025 della società di rating specializzate | 
+                    I rendimenti passati non garantiscono i rendimenti futuri
+                </p>
+            </div>
+
+            <!-- SCENARIOS TABLE -->
+            <h2>Simulazione di rendimento</h2>
+            <p style="margin-bottom: 15px; font-size: 0.95em;">
+                <strong>Esempio:</strong> Versamento di €1.000 annui per 10 anni (capitale totale €10.000)
+            </p>
+
+            <table class="scenario-table">
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Capitale finale</th>
+                        <th>+ Bonus 15%</th>
+                        <th>Rimborso totale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="scenario-name">Stress</td>
+                        <td>€ 9.925</td>
+                        <td>€ 1.489</td>
+                        <td class="value-strong">€ 11.414</td>
+                    </tr>
+                    <tr>
+                        <td class="scenario-name">Sfavorevole</td>
+                        <td>€ 10.010</td>
+                        <td>€ 1.502</td>
+                        <td class="value-strong">€ 11.512</td>
+                    </tr>
+                    <tr style="background: #f0f6ff;">
+                        <td class="scenario-name"><strong>Moderato</strong></td>
+                        <td><strong>€ 11.177</strong></td>
+                        <td><strong>€ 1.677</strong></td>
+                        <td class="value-strong"><strong>€ 12.854</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="scenario-name">Favorevole</td>
+                        <td>€ 11.464</td>
+                        <td>€ 1.720</td>
+                        <td class="value-strong">€ 13.184</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: 15px; font-size: 0.85em; color: #666; text-align: center;">
+                * Scenario moderato basato su rendimenti storici della Gestione Valore Unipol (2,01% annuo netto)
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- GUARANTEES -->
+            <h2>Le tue garanzie</h2>
+            <div style="margin: 20px 0;">
+                <span class="guarantee-badge">✓ Capitale garantito</span>
+                <span class="guarantee-badge">✓ Bonus 15% sicuro</span>
+                <span class="guarantee-badge">✓ Tasso minimo 0%</span>
+                <span class="guarantee-badge">✓ Protezione decesso</span>
+            </div>
+
+            <!-- CTA -->
+            <div class="cta-section">
+                <h3>Scopri il tuo piano personalizzato</h3>
+                <p>
+                    Usa il nostro simulatore interattivo per vedere esattamente quanto potresti accumulare. 
+                    È rapido, gratuito e senza impegno.
+                </p>
+                <a href="simulatore_risparmio_bonus.html" class="cta-button" target="_blank">📊 Prova il Simulatore</a>
+                <a href="mailto:stefano@carlotorre24.com?subject=Richiesta%20consulenza%20Risparmio%20Bonus&body=Mi%20interessa%20ricevere%20consulenza%20su%20Risparmio%20Bonus.%0A%0AGrazie" 
+                   class="secondary-cta">Richiedi consulenza</a>
+            </div>
+
+            <!-- CONTACT -->
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 25px; text-align: center;">
+                <p><strong>Hai domande?</strong></p>
+                <p>
+                    Contattami: <strong>379 217 2542</strong><br>
+                    Email: <strong>stefano@carlotorre24.com</strong><br>
+                    Nome: <strong>Stefano Manzini</strong>
+                </p>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>
+                <strong>Unipol Risparmio Bonus (Tariffa U60008)</strong><br>
+                Assicurazione sulla vita di capitale differito con rivalutazione annua
+            </p>
+            <p>
+                Questo documento è a scopo informativo. Per informazioni complete, consulta il KID 
+                (Documento contenente le Informazioni Chiave) e la documentazione contrattuale completa.
+            </p>
+            <p>
+                <a href="#">Scarica il KID completo</a> | 
+                <a href="#">Consulta le condizioni contrattuali</a> | 
+                <a href="#">Informativa sulla privacy</a>
+            </p>
+            <p style="margin-top: 15px; font-size: 0.8em; opacity: 0.8;">
+                Unipol Assicurazioni S.p.A. | Sede legale: Bologna | 
+                <a href="#">www.unipol.it</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
