@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulatore Risparmio Bonus - Unipol</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #003366 0%, #005fa3 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #003366 0%, #005fa3 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 40px;
+        }
+
+        .input-section h2 {
+            color: #003366;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #005fa3;
+            padding-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #005fa3;
+            box-shadow: 0 0 0 3px rgba(0, 95, 163, 0.1);
+        }
+
+        .input-group-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .slider-container {
+            margin-top: 8px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #005fa3;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 95, 163, 0.3);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #005fa3;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0, 95, 163, 0.3);
+        }
+
+        .results-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .results-section h2 {
+            color: #003366;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #005fa3;
+            padding-bottom: 12px;
+        }
+
+        .result-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            border-left: 5px solid #005fa3;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-label {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-size: 1.8em;
+            color: #003366;
+            font-weight: 700;
+        }
+
+        .scenario-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .scenario-box {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-box:hover {
+            border-color: #005fa3;
+            box-shadow: 0 4px 12px rgba(0, 95, 163, 0.15);
+        }
+
+        .scenario-title {
+            font-size: 0.85em;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .scenario-value {
+            font-size: 1.4em;
+            color: #003366;
+            font-weight: 700;
+        }
+
+        .scenario-return {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 6px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #005fa3;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: #003366;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #003366 0%, #005fa3 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 95, 163, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .warranty-box {
+            background: #f0f8ff;
+            padding: 18px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 2px solid #b3d9ff;
+        }
+
+        .warranty-box h4 {
+            color: #003366;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .warranty-box ul {
+            margin-left: 20px;
+            color: #555;
+            font-size: 0.9em;
+            line-height: 1.7;
+        }
+
+        .summary-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .summary-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .summary-table .label {
+            color: #666;
+            font-weight: 500;
+            width: 50%;
+        }
+
+        .summary-table .value {
+            color: #003366;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .bonus-highlight {
+            background: #fff3cd;
+            color: #856404;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+            border-left: 4px solid #ffc107;
+        }
+
+        @media (max-width: 968px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.6em;
+            }
+
+            .scenario-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.85em;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .footer p {
+            margin: 8px 0;
+        }
+
+        .footer a {
+            color: #005fa3;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Simulatore Risparmio Bonus</h1>
+            <p>Scopri il tuo rendimento potenziale | Unipol</p>
+        </div>
+
+        <div class="content">
+            <div class="input-section">
+                <h2>Parametri della Simulazione</h2>
+
+                <div class="form-group">
+                    <label for="premio">Premio annuo (€)</label>
+                    <input type="number" id="premio" min="100" max="100000" value="1000" step="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="eta">Età assicurato (anni)</label>
+                    <input type="number" id="eta" min="18" max="70" value="45" step="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="durata">Durata contratto (anni)</label>
+                    <div class="slider-container">
+                        <input type="range" id="durata" min="10" max="30" value="10" step="1">
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.85em; color: #666;">
+                        <span>10 anni</span>
+                        <span id="durataDisplay" style="font-weight: 600; color: #003366;">10 anni</span>
+                        <span>30 anni</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="scenario">Scenario di base</label>
+                    <select id="scenario">
+                        <option value="stress">Stress (-5,45% annuo)</option>
+                        <option value="sfavorevole">Sfavorevole (-5,38% annuo)</option>
+                        <option value="moderato" selected>Moderato (2,01% annuo)</option>
+                        <option value="favorevole">Favorevole (2,47% annuo)</option>
+                    </select>
+                </div>
+
+                <div class="warranty-box">
+                    <h4>✓ Garanzie del prodotto</h4>
+                    <ul>
+                        <li><strong>Bonus garantito:</strong> +15% alla scadenza</li>
+                        <li><strong>Tasso minimo:</strong> 0,00% annuo</li>
+                        <li><strong>Protezione decesso:</strong> Controassicurazione inclusa</li>
+                        <li><strong>Riscatto:</strong> Possibile dopo 3 anni</li>
+                        <li><strong>Ricorso:</strong> Gestione separata Valore Unipol</li>
+                    </ul>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary" onclick="calcolaRisultati()">Calcola Simulazione</button>
+                    <button class="btn-secondary" onclick="resetForm()">Ripristina</button>
+                </div>
+
+                <div class="info-box">
+                    <strong>ℹ️ Nota importante:</strong> Questa simulazione è illustrativa e si basa su scenari storici. 
+                    I rendimenti futuri non sono garantiti e possono variare. Il prodotto è idoneo a chi ha obiettivi di 
+                    risparmio su orizzonte medio-lungo con tolleranza al rischio bassa.
+                </div>
+            </div>
+
+            <div class="results-section">
+                <h2>Risultati della Simulazione</h2>
+
+                <div class="result-card">
+                    <div class="result-label">Capital iniziale versato</div>
+                    <div class="result-value" id="capitalInitiale">€ 10.000</div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-label">Capitale rivalutato alla scadenza</div>
+                    <div class="result-value" id="capitaleFine">€ 11.177</div>
+                </div>
+
+                <div class="bonus-highlight">
+                    <strong>🎁 BONUS GARANTITO (+15%)</strong>
+                    <div style="font-size: 1.4em; margin-top: 8px;" id="bonusValue">€ 1.677</div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-label"><strong>Rimborso totale (capitale + bonus)</strong></div>
+                    <div class="result-value" id="rimborsoTotale">€ 12.854</div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-label">Rendimento medio annuo</div>
+                    <div class="result-value" id="rendimentoMedio">2,01%</div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-label">Guadagno netto</div>
+                    <div class="result-value" id="guadagnoNetto" style="color: #28a745;">€ 2.854</div>
+                </div>
+
+                <h3 style="color: #003366; margin-top: 30px; margin-bottom: 15px; font-size: 1.1em;">Confronto scenari</h3>
+                <div class="scenario-container">
+                    <div class="scenario-box">
+                        <div class="scenario-title">Stress</div>
+                        <div class="scenario-value" id="scenarioStress">€ 10.829</div>
+                        <div class="scenario-return">-5,45% annuo</div>
+                    </div>
+                    <div class="scenario-box">
+                        <div class="scenario-title">Sfavorevole</div>
+                        <div class="scenario-value" id="scenarioSfav">€ 10.914</div>
+                        <div class="scenario-return">-5,38% annuo</div>
+                    </div>
+                    <div class="scenario-box">
+                        <div class="scenario-title">Moderato</div>
+                        <div class="scenario-value" id="scenarioMod">€ 11.177</div>
+                        <div class="scenario-return">2,01% annuo</div>
+                    </div>
+                    <div class="scenario-box">
+                        <div class="scenario-title">Favorevole</div>
+                        <div class="scenario-value" id="scenarioFav">€ 11.464</div>
+                        <div class="scenario-return">2,47% annuo</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="myChart"></canvas>
+                </div>
+
+                <table class="summary-table">
+                    <tr>
+                        <td class="label">Premio assicurativo medio/anno:</td>
+                        <td class="value" id="premioAssicurativo">€ 15,72</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Importo investito medio/anno:</td>
+                        <td class="value" id="importoInvestito">€ 959,04</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Costi annuali (commissioni):</td>
+                        <td class="value">2,0%</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Età assicurato a scadenza:</td>
+                        <td class="value" id="etaScadenza">55 anni</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Unipol Risparmio Bonus (Tariffa U60008)</strong> | Assicurazione sulla vita con rivalutazione annua</p>
+            <p>Questa simulazione è fornita a scopo informativo. Per informazioni complete consultare il KID e la documentazione contrattuale.</p>
+            <p>📞 Contatti: 800.551.144 | 🌐 www.unipol.it</p>
+        </div>
+    </div>
+
+    <script>
+        const durataInput = document.getElementById('durata');
+        const durataDisplay = document.getElementById('durataDisplay');
+        let chart = null;
+
+        durataInput.addEventListener('input', function() {
+            durataDisplay.textContent = this.value + ' anni';
+        });
+
+        function calcolaRisultati() {
+            const premio = parseFloat(document.getElementById('premio').value) || 1000;
+            const eta = parseInt(document.getElementById('eta').value) || 45;
+            const durata = parseInt(document.getElementById('durata').value) || 10;
+            const scenarioSel = document.getElementById('scenario').value;
+
+            // Tasso tecnico
+            const tassoTecnico = 0.0;
+
+            // Rendimenti medi per scenario
+            const rendimenti = {
+                stress: -0.0545,
+                sfavorevole: -0.0538,
+                moderato: 0.0201,
+                favorevole: 0.0247
+            };
+
+            const rendimentoMedio = rendimenti[scenarioSel];
+
+            // Calcolo capitale investito
+            const capitalInitiale = premio * durata;
+            
+            // Importo medio investito annualmente (ca. 96% del premio dopo costi fissi)
+            const importoMedio = premio * 0.9590;
+
+            // Calcolo rivalutazione secondo formula KID
+            // Rendimento annuale netto = (rendimento gestione - commissione 1,10% - tasso tecnico)
+            const commissioneGestione = 0.011;
+            const rendimentoNetto = rendimentoMedio - commissioneGestione - tassoTecnico;
+
+            // Capitale con rivalutazione
+            let capitaleFine = 0;
+            let capitaleCumulato = 0;
+            for (let anno = 1; anno <= durata; anno++) {
+                capitaleCumulato += premio;
+                capitaleCumulato = capitaleCumulato * (1 + rendimentoNetto);
+            }
+            capitaleFine = capitaleCumulato;
+
+            // Bonus garantito 15%
+            const bonus = capitaleFine * 0.15;
+            const rimborsoTotale = capitaleFine + bonus;
+
+            // Guadagno netto
+            const guadagnoNetto = rimborsoTotale - capitalInitiale;
+
+            // Rendimento annuo medio del prodotto
+            const rendimentoAnnuoProdotto = Math.pow(rimborsoTotale / capitalInitiale, 1 / durata) - 1;
+
+            // Premio assicurativo (ca. 1,57% del premio annuo)
+            const premioAssicurativoMedio = premio * 0.0157;
+
+            // Età a scadenza
+            const etaScadenza = eta + durata;
+
+            // Aggiornamento DOM
+            document.getElementById('capitalInitiale').textContent = '€ ' + formatNumber(capitalInitiale);
+            document.getElementById('capitaleFine').textContent = '€ ' + formatNumber(capitaleFine);
+            document.getElementById('bonusValue').textContent = '€ ' + formatNumber(bonus);
+            document.getElementById('rimborsoTotale').textContent = '€ ' + formatNumber(rimborsoTotale);
+            document.getElementById('rendimentoMedio').textContent = (rendimentoMedio * 100).toFixed(2) + '%';
+            document.getElementById('guadagnoNetto').textContent = '€ ' + formatNumber(guadagnoNetto);
+            document.getElementById('premioAssicurativo').textContent = '€ ' + formatNumber(premioAssicurativoMedio);
+            document.getElementById('importoInvestito').textContent = '€ ' + formatNumber(importoMedio);
+            document.getElementById('etaScadenza').textContent = etaScadenza + ' anni';
+
+            // Calcolo scenari
+            const scenari = {
+                stress: calcolaScenario(-0.0545, premio, durata, capitalInitiale),
+                sfavorevole: calcolaScenario(-0.0538, premio, durata, capitalInitiale),
+                moderato: calcolaScenario(0.0201, premio, durata, capitalInitiale),
+                favorevole: calcolaScenario(0.0247, premio, durata, capitalInitiale)
+            };
+
+            document.getElementById('scenarioStress').textContent = '€ ' + formatNumber(scenari.stress);
+            document.getElementById('scenarioSfav').textContent = '€ ' + formatNumber(scenari.sfavorevole);
+            document.getElementById('scenarioMod').textContent = '€ ' + formatNumber(scenari.moderato);
+            document.getElementById('scenarioFav').textContent = '€ ' + formatNumber(scenari.favorevole);
+
+            // Grafico
+            aggiornaGrafico(durata, premio, capitalInitiale);
+        }
+
+        function calcolaScenario(rendimento, premio, durata, capitalInitiale) {
+            const commissioneGestione = 0.011;
+            const rendimentoNetto = rendimento - commissioneGestione;
+            let capitaleCumulato = 0;
+            for (let anno = 1; anno <= durata; anno++) {
+                capitaleCumulato += premio;
+                capitaleCumulato = capitaleCumulato * (1 + rendimentoNetto);
+            }
+            return capitaleCumulato;
+        }
+
+        function aggiornaGrafico(durata, premio, capitalInitiale) {
+            const anni = [];
+            const dataStress = [];
+            const dataSfavorevole = [];
+            const dataModerate = [];
+            const dataFavorevole = [];
+
+            for (let anno = 0; anno <= durata; anno++) {
+                anni.push(anno);
+                
+                if (anno === 0) {
+                    dataStress.push(0);
+                    dataSfavorevole.push(0);
+                    dataModerate.push(0);
+                    dataFavorevole.push(0);
+                } else {
+                    const stress = calcolaCapitaleParziale(premio, anno, -0.0545);
+                    const sfav = calcolaCapitaleParziale(premio, anno, -0.0538);
+                    const mod = calcolaCapitaleParziale(premio, anno, 0.0201);
+                    const fav = calcolaCapitaleParziale(premio, anno, 0.0247);
+
+                    dataStress.push(stress);
+                    dataSfavorevole.push(sfav);
+                    dataModerate.push(mod);
+                    dataFavorevole.push(fav);
+                }
+            }
+
+            const ctx = document.getElementById('myChart').getContext('2d');
+            
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: anni,
+                    datasets: [
+                        {
+                            label: 'Stress',
+                            data: dataStress,
+                            borderColor: '#d32f2f',
+                            backgroundColor: 'rgba(211, 47, 47, 0.05)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: false
+                        },
+                        {
+                            label: 'Sfavorevole',
+                            data: dataSfavorevole,
+                            borderColor: '#f57c00',
+                            backgroundColor: 'rgba(245, 127, 0, 0.05)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: false
+                        },
+                        {
+                            label: 'Moderato',
+                            data: dataModerate,
+                            borderColor: '#005fa3',
+                            backgroundColor: 'rgba(0, 95, 163, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Favorevole',
+                            data: dataFavorevole,
+                            borderColor: '#388e3c',
+                            backgroundColor: 'rgba(56, 142, 60, 0.05)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 15,
+                                font: { size: 12, weight: '600' }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '€ ' + (value / 1000).toFixed(1) + 'k';
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Anni'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function calcolaCapitaleParziale(premio, anno, rendimento) {
+            const commissioneGestione = 0.011;
+            const rendimentoNetto = rendimento - commissioneGestione;
+            let capitale = 0;
+            for (let i = 1; i <= anno; i++) {
+                capitale += premio;
+                capitale = capitale * (1 + rendimentoNetto);
+            }
+            return capitale;
+        }
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('it-IT', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(num);
+        }
+
+        function resetForm() {
+            document.getElementById('premio').value = 1000;
+            document.getElementById('eta').value = 45;
+            document.getElementById('durata').value = 10;
+            document.getElementById('durataDisplay').textContent = '10 anni';
+            document.getElementById('scenario').value = 'moderato';
+            calcolaRisultati();
+        }
+
+        // Calcolo iniziale al caricamento
+        window.addEventListener('load', function() {
+            calcolaRisultati();
+        });
+    </script>
+</body>
+</html>
